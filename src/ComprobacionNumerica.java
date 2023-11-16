@@ -5,7 +5,6 @@ import javax.swing.JOptionPane;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author oli
@@ -31,20 +30,28 @@ public class ComprobacionNumerica extends javax.swing.JFrame {
         lblTitulo = new javax.swing.JLabel();
         lblEtiquetaNumero = new javax.swing.JLabel();
         txtNumero = new javax.swing.JTextField();
-        btnComprobar = new javax.swing.JButton();
+        btnComprobarPrimo = new javax.swing.JButton();
+        btnComprobarPerfecto = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lblTitulo.setText("Comprobación");
 
-        lblEtiquetaNumero.setText("Ingrese número");
+        lblEtiquetaNumero.setText("Ingrese número entre el 1 y el 500");
 
         txtNumero.setToolTipText("");
 
-        btnComprobar.setText("Comprobar");
-        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+        btnComprobarPrimo.setText("Comprobar Primo");
+        btnComprobarPrimo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnComprobarActionPerformed(evt);
+                btnComprobarPrimoActionPerformed(evt);
+            }
+        });
+
+        btnComprobarPerfecto.setText("Comprobar Perfecto");
+        btnComprobarPerfecto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarPerfectoActionPerformed(evt);
             }
         });
 
@@ -56,17 +63,20 @@ public class ComprobacionNumerica extends javax.swing.JFrame {
                 .addGap(172, 172, 172)
                 .addComponent(lblTitulo)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(83, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnComprobarPrimo, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblEtiquetaNumero))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblEtiquetaNumero)
-                        .addGap(77, 77, 77)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 42, Short.MAX_VALUE)
                         .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(65, 65, 65))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnComprobar)
-                        .addGap(149, 149, 149))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnComprobarPerfecto, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -78,36 +88,73 @@ public class ComprobacionNumerica extends javax.swing.JFrame {
                     .addComponent(lblEtiquetaNumero)
                     .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
-                .addComponent(btnComprobar)
-                .addGap(69, 69, 69))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnComprobarPrimo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnComprobarPerfecto, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    public static boolean Comprobador(int numero) {
-        if (numero <= 1) {
+
+    public static boolean ComprobadorPerfectos(int numeroInicial) {
+        if (numeroInicial <= 1) {
             return false;
         }
         int sumaDivisores = 1;
-        for (int i=2; i<=numero/2; i++) {
-            if (numero % i == 0) {
+        for (int i = 2; i <= numeroInicial / 2; i++) {
+            if (numeroInicial % i == 0) {
                 sumaDivisores += i;
             }
         }
 
-        return sumaDivisores == numero;
+        return sumaDivisores == numeroInicial;
     }
-    
-    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+
+    public static boolean ComprobadorPrimos(int numeroInicial) {
+        if (numeroInicial <= 1) {
+            return false;
+        }
+        for (int i = 2; i <= Math.sqrt(numeroInicial); i++) {
+            if (numeroInicial % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void btnComprobarPrimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarPrimoActionPerformed
         //Comprobador de números perfectos
-        int numero=Integer.parseInt(txtNumero.getText());
-        if (Comprobador(numero)) {
-            JOptionPane.showMessageDialog(rootPane, numero + " es un número perfecto");
+        int numero = Integer.parseInt(txtNumero.getText());
+        int[] conjuntoNumPrim = new int[500];
+        int contadorPrimos = 0;
+        for (int i = 1; i < numero; i++) {
+            if (ComprobadorPrimos(i)) {
+                conjuntoNumPrim[i] = i;
+                System.out.println(conjuntoNumPrim[i]);
+                contadorPrimos++;
+            }
+        }
+        int sumaPrimos = 0;
+        for (int i = 0; i < conjuntoNumPrim.length; i++) {
+            sumaPrimos += conjuntoNumPrim[i];
+        }
+
+        JOptionPane.showMessageDialog(rootPane, numero + " es primo"
+                + "\nHay " + contadorPrimos + " números primos entre 0 y " + numero
+                + "\nLa sumatoria de todos esos números primos es igual: " + sumaPrimos+
+                "\nLa raíz cuadrada de la sumatoria de los primos es igual: "+Math.sqrt(sumaPrimos));
+    }//GEN-LAST:event_btnComprobarPrimoActionPerformed
+
+    private void btnComprobarPerfectoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarPerfectoActionPerformed
+        int numero = Integer.parseInt(txtNumero.getText());
+        if (ComprobadorPerfectos(numero)) {
+            JOptionPane.showMessageDialog(rootPane, numero + " es perfecto");
         } else {
             JOptionPane.showMessageDialog(rootPane, numero + " no es perfecto");
         }
-    }//GEN-LAST:event_btnComprobarActionPerformed
+    }//GEN-LAST:event_btnComprobarPerfectoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -145,7 +192,8 @@ public class ComprobacionNumerica extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnComprobar;
+    private javax.swing.JButton btnComprobarPerfecto;
+    private javax.swing.JButton btnComprobarPrimo;
     private javax.swing.JLabel lblEtiquetaNumero;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtNumero;
